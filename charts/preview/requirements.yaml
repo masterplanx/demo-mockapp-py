@@ -9,5 +9,5 @@ dependencies:
   repository: https://chartmuseum.build.cd.jenkins-x.io
   version: 2.3.56
 - alias: preview
-  name: demo-mockapp
-  repository: file://../demo-mockapp
+  name: demo-mockapp-py
+  repository: file://../demo-mockapp-py

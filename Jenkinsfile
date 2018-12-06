@@ -3,8 +3,8 @@ pipeline {
     label "jenkins-python"
   }
   environment {
-    ORG = 'graidelak'
-    APP_NAME = 'demo-mockapp'
+    ORG = 'masterplanx'
+    APP_NAME = 'demo-mockapp-py'
     CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
   }
   stages {
@@ -34,12 +34,13 @@ pipeline {
         branch 'master'
       }
       steps {
-        container('python') {
+        git 'https://github.com/masterplanx/demo-mockapp-py.git'
 
-          // ensure we're not on a detached head
-          sh "git checkout master"
-          sh "git config --global credential.helper store"
-          sh "jx step git credentials"
+        // ensure we're not on a detached head
+        sh "git checkout master"
+        sh "git config --global credential.helper store"
+        sh "jx step git credentials"
+        container('python') {
 
           // so we can retrieve the version in later steps
           sh "echo \$(jx-release-version) > VERSION"
@@ -56,7 +57,7 @@ pipeline {
       }
       steps {
         container('python') {
-          dir('./charts/demo-mockapp') {
+          dir('./charts/demo-mockapp-py') {
             sh "jx step changelog --version v\$(cat ../../VERSION)"
 
             // release the helm chart
@@ -69,9 +70,3 @@ pipeline {
       }
     }
   }
-  post {
-        always {
-          cleanWs()
-        }
-  }
-}
